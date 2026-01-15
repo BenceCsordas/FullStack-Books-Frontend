@@ -12,12 +12,13 @@ const BooksByCateg = () => {
     const xIcon = <IconX size={20}/>
   return (
     <Flex direction="column" justify="flex-start" gap="md" align="center" style={{paddingTop:"100px", paddingBottom:"10px"}}>
-        <Title>{data && data.data[0].category}</Title>
+        <Title style={{color:"indigo"}}>{data && data.data[0].category}</Title>
         {isLoading && <Loader color="blue" />}
         {isError && <Notification icon={xIcon} color='red' title="Bummer!">{error.message}</Notification>}
         {data && data.data.map(obj=>
+            
             <Box key={obj.id}>
-                <MyCard {...obj}/>
+                <MyCard {...obj} categ={false}/>
             </Box>
         )
         

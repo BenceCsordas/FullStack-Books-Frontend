@@ -18,7 +18,7 @@ const SearchResult = () => {
         {data && <Title>A keresett könyvcím / könyvcím részlet: {txt}</Title>}
         {data && data.data.length > 0 ? data.data.map(obj=>
             <Box key={obj.id}>
-                <MyCard {...obj}/>
+                <MyCard {...obj} categ={true}/>
             </Box>
         )
         :

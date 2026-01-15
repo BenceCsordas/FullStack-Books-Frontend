@@ -1,6 +1,6 @@
 import { Card, Image, Text, Badge, Button, Group } from '@mantine/core';
 
-export const MyCard = ({title, author, cover, description, rating}) => {
+export const MyCard = ({title, author, cover, description, rating, categ, category}) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder style={{width:"300px"}}>
       <Card.Section>
@@ -10,7 +10,7 @@ export const MyCard = ({title, author, cover, description, rating}) => {
           mah={220}
           fit='cover'
         //   style={{aspectRatio:"1/1"}}
-          
+          fallbackSrc="https://placehold.co/600x400?text=Placeholder"
         />
       </Card.Section>
 
@@ -26,6 +26,10 @@ export const MyCard = ({title, author, cover, description, rating}) => {
       <Text size="sm" c="dimmed">
         Szerző: {author}
       </Text>
+      
+      {categ ? <Text size="sm" c="dimmed">
+        Kategória: {category}
+      </Text> : null}
 
       
     </Card>
