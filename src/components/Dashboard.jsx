@@ -1,0 +1,85 @@
+import { Button, Flex, Modal, ScrollArea, Table, TextInput } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createBook, readBooks } from '../utils';
+import { RiPencilFill } from "react-icons/ri";
+import { TbTrashFilled } from "react-icons/tb";
+
+const Dashboard = () => {
+    const [books, setBooks] = useState([])
+    const [showForm, setShowForm] = useState(false)
+    const [newBook, setNewBook] = useState({title:"", author:"", description:""})
+    useEffect(()=>{
+        readBooks(setBooks)
+    }, [])
+
+    const rows = books.map((obj) => (
+    <Table.Tr key={obj.id}>
+        <Table.Td>{obj.id}</Table.Td>
+      <Table.Td>{obj.title}</Table.Td>
+      <Table.Td>{obj.author}</Table.Td>
+      <Table.Td>{obj.description}</Table.Td>
+      <Table.Td>{obj.category}</Table.Td>
+      <Table.Td>{obj.cover}</Table.Td>
+      <Table.Td>{obj.rating}</Table.Td>
+      <Table.Td>{<RiPencilFill size={20} color='blue'/>}</Table.Td>
+      <Table.Td>{<TbTrashFilled size={20} color='red'/>}</Table.Td>
+    </Table.Tr>
+  ));
+
+    const handleChange = (e) => {
+        setNewBook({...newBook, [e.target.name]:e.target.value})
+    }
+
+    const handleSave = async () => {
+        try {
+            const bookToSave = {...newBook, category_id:1, cover:"borító", rating:5}
+            const savedBook = await createBook(bookToSave)
+            setBooks((prev)=>[...prev, savedBook])
+            setShowForm(false)
+            setNewBook({title:"", author:"", description:""})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+  
+
+  return (
+<>
+    <Flex direction="column" gap="md" justify="flex-start" align="center">
+        <ScrollArea h={600} bg="#eff2ff">
+            <Table stickyHeader withColumnBorders withRowBorders withTableBorder>
+                <Table.Thead>
+                    <Table.Tr>
+                    <Table.Th>Id</Table.Th>
+                    <Table.Th>Cím</Table.Th>
+                    <Table.Th>Szerző</Table.Th>
+                    <Table.Th>Leírás</Table.Th>
+                    <Table.Th>Kategória</Table.Th>
+                    <Table.Th>Kép</Table.Th>
+                    <Table.Th>Értékelés</Table.Th>
+                    <Table.Th>Szerkesztés</Table.Th>
+                    <Table.Th>Törlés</Table.Th>
+                </Table.Tr>
+             </Table.Thead>
+            <Table.Tbody>{rows}</Table.Tbody>
+            <Table.Caption>Összesen {books && books.length} könyv van a könyvtárban</Table.Caption>
+           
+         </Table>
+        </ScrollArea>
+        <Button onClick={()=>setShowForm(true)}>Új könyv hozzáadása</Button>
+    </Flex>
+
+
+        <Modal opened={showForm} onClose={()=>setShowForm(false)} title="Focus demo">
+            <TextInput label="Cím" name='title' placeholder="Könyv címe" value={newBook.title} onChange={handleChange} required />
+            <TextInput label="Szerző" name='author' placeholder="Szerző neve" value={newBook.author} onChange={handleChange} required />
+            <TextInput label="Leírás" name='description' placeholder="Könyv leírása" value={newBook.description} onChange={handleChange} required />
+            <Button onClick={handleSave}>Mentés</Button>
+        </Modal>
+</>
+  );
+}
+
+export default Dashboard

@@ -11,9 +11,17 @@ import Books from './components/Books';
 import BooksByCateg from './components/BooksByCateg';
 import SearchResult from './components/SearchResult';
 import { MyMenu } from './components/MyMenu';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './components/Dashboard';
+
+
 function App() {
+
+
+  const [isAdmin, setIsAdmin] = useState(false)
   const {height, width} = useViewportSize()
   const isMobile = useMediaQuery('(max-width:525px)')
+  console.log(isAdmin)
   return ( 
     <BrowserRouter>
         <Flex
@@ -31,7 +39,7 @@ function App() {
               <Title order={3} c="white" style={{textAlign:"center"}}>Válogass a könyvtárból</Title>
           </Affix>
           <Affix position={{top: isMobile ? 50 : 20, right:10}}>
-              <MyMenu/>
+              <MyMenu setIsAdmin={setIsAdmin}/>
           </Affix>
 
         <Routes>
@@ -39,6 +47,7 @@ function App() {
             <Route path='/books' element={<Books/>}/>
             <Route path='/books/category/:categId' element={<BooksByCateg/>}/>
             <Route path='/search/:txt' element={<SearchResult/>}/> 
+            <Route path='/dashboard' element={<ProtectedRoute isAdmin={isAdmin}><Dashboard/></ProtectedRoute>}/>
         </Routes>
           
 
