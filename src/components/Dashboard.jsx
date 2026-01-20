@@ -53,15 +53,16 @@ const Dashboard = () => {
         try {
             if(editingBook){
                 console.log("módosítás")
-                
+                const updatedBook = await editBook(editingBook.id, newBook)
+                setBooks(prev=>prev.map(obj=>obj.id==editingBook.id ? updatedBook : obj))
             }else{
-
+                const bookToSave = {...newBook, category_id:1, cover:"borító", rating:5}
+                const savedBook = await createBook(bookToSave)
+                setBooks((prev)=>[...prev, savedBook])
             }
-            const bookToSave = {...newBook, category_id:1, cover:"borító", rating:5}
-            const savedBook = await createBook(bookToSave)
-            setBooks((prev)=>[...prev, savedBook])
             setShowForm(false)
             setNewBook({title:"", author:"", description:""})
+            setEditingBook(null)
         } catch (error) {
             console.log(error)
         }
